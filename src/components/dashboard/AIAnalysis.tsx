@@ -69,23 +69,23 @@ const AIAnalysis = () => {
       }
     >
       <div className="space-y-4">
-        {evaluations.map((eval, index) => (
+        {evaluations.map((evaluation, index) => (
           <div key={index} className="bg-background rounded-lg p-3 border border-border/50">
             <div className="flex justify-between items-center mb-2">
-              <h4 className="font-medium text-sm">{eval.category}</h4>
-              {getStatusBadge(eval.status)}
+              <h4 className="font-medium text-sm">{evaluation.category}</h4>
+              {getStatusBadge(evaluation.status)}
             </div>
             <div className="w-full bg-muted rounded-full h-2 mb-3">
               <div 
-                className={cn("h-2 rounded-full", getScoreColor(eval.score))}
-                style={{ width: `${eval.score}%` }}
+                className={cn("h-2 rounded-full", getScoreColor(evaluation.score))}
+                style={{ width: `${evaluation.score}%` }}
               ></div>
             </div>
             <div className="flex items-start gap-2">
               <div className="mt-0.5 flex-shrink-0">
                 <AlertCircle className="w-3.5 h-3.5 text-purple-500" />
               </div>
-              <p className="text-xs text-muted-foreground">{eval.suggestion}</p>
+              <p className="text-xs text-muted-foreground">{evaluation.suggestion}</p>
             </div>
           </div>
         ))}
