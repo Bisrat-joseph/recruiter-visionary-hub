@@ -9,10 +9,12 @@ import ActivityFeed from '@/components/dashboard/ActivityFeed';
 import AIAnalysis from '@/components/dashboard/AIAnalysis';
 import HiringFunnel from '@/components/dashboard/HiringFunnel';
 import WhatsNew from '@/components/dashboard/WhatsNew';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Index = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { userProfile } = useAuth();
 
   useEffect(() => {
     // Simulate loading
@@ -21,6 +23,8 @@ const Index = () => {
     }, 800);
     return () => clearTimeout(timer);
   }, []);
+
+  const userName = userProfile?.first_name || 'User';
 
   const renderLoadingSkeleton = () => (
     <div className="flex flex-col gap-6 animate-pulse">
@@ -51,7 +55,7 @@ const Index = () => {
           <div className="max-w-7xl mx-auto">
             <header className="mb-8">
               <div className="animate-fade-up" style={{ '--delay': '0' } as React.CSSProperties}>
-                <h1 className="text-2xl font-semibold">Welcome back, Jessica</h1>
+                <h1 className="text-2xl font-semibold">Welcome back, {userName}</h1>
                 <p className="text-muted-foreground mt-1">Here's what's happening with your recruitment today.</p>
               </div>
             </header>

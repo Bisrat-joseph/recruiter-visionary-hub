@@ -1,7 +1,8 @@
-
 import React, { useState } from 'react';
-import { Bell, Search, User, ChevronDown, Plus } from 'lucide-react';
+import { Bell, Search, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/contexts/AuthContext';
+import UserAvatar from '@/components/auth/UserAvatar';
 
 interface NavbarProps {
   collapsed: boolean;
@@ -9,7 +10,7 @@ interface NavbarProps {
 
 const Navbar = ({ collapsed }: NavbarProps) => {
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
+  const { user } = useAuth();
   
   return (
     <header className="sticky top-0 z-20 w-full glass-nav px-4 py-3">
@@ -66,45 +67,14 @@ const Navbar = ({ collapsed }: NavbarProps) => {
             )}
           </div>
           
-          <button className="py-1.5 px-3 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-1.5">
-            <Plus className="w-4 h-4" />
-            <span>Invite Recruiters</span>
-          </button>
-          
-          <div className="relative">
-            <button 
-              className="flex items-center gap-2 hover:bg-accent p-1.5 rounded-full transition-colors"
-              onClick={() => setShowProfile(!showProfile)}
-            >
-              <div className="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center">
-                <span className="text-sm font-medium text-purple-700">JS</span>
-              </div>
-              <ChevronDown className="w-4 h-4 text-muted-foreground" />
+          {user && (
+            <button className="py-1.5 px-3 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-1.5">
+              <Plus className="w-4 h-4" />
+              <span>Invite Recruiters</span>
             </button>
-            
-            {showProfile && (
-              <div className="absolute right-0 mt-2 w-56 bg-popover rounded-xl shadow-lg border border-border animate-fade-in z-50">
-                <div className="p-3 border-b border-border">
-                  <p className="font-medium">Jessica Smith</p>
-                  <p className="text-sm text-muted-foreground">HR Manager</p>
-                </div>
-                <div className="p-2">
-                  <button className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors">
-                    Profile Settings
-                  </button>
-                  <button className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors">
-                    Team Management
-                  </button>
-                  <button className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors">
-                    Billing
-                  </button>
-                  <button className="w-full text-left px-3 py-2 text-sm text-red-500 rounded-md hover:bg-red-50 transition-colors">
-                    Sign Out
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+          )}
+          
+          <UserAvatar />
         </div>
       </div>
     </header>
