@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, Search, Plus } from 'lucide-react';
+import { Bell, Search, Plus, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import UserAvatar from '@/components/auth/UserAvatar';
