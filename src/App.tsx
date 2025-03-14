@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import Resume from "./pages/Resume";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
 import PrivateRoute from "./components/auth/PrivateRoute";
@@ -25,6 +26,14 @@ const App = () => (
               element={
                 <PrivateRoute>
                   <Index />
+                </PrivateRoute>
+              } 
+            />
+            <Route 
+              path="/resume" 
+              element={
+                <PrivateRoute>
+                  <Resume />
                 </PrivateRoute>
               } 
             />

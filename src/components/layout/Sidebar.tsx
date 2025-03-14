@@ -1,116 +1,151 @@
 
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 import { 
-  LayoutDashboard, 
-  Users, 
-  Briefcase, 
-  Brain, 
-  BarChart3, 
-  MessageCircle, 
-  FileText, 
+  ChevronLeft, 
+  LayoutDashboard,
+  Users,
+  Briefcase,
+  Calendar,
   Settings,
-  ChevronLeft,
-  ChevronRight
+  HelpCircle,
+  FileText
 } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface SidebarProps {
   collapsed: boolean;
-  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  setCollapsed: (collapsed: boolean) => void;
 }
 
-export const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  
+const Sidebar = ({ collapsed, setCollapsed }: SidebarProps) => {
+  const { pathname } = useLocation();
+  const { signOut } = useAuth();
+
   const menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
-    { icon: Users, label: 'Candidate Insights', path: '/candidates' },
-    { icon: Briefcase, label: 'Job Postings', path: '/jobs' },
-    { icon: Brain, label: 'AI Analysis', path: '/ai-analysis' },
-    { icon: BarChart3, label: 'Reports', path: '/reports' },
-    { icon: MessageCircle, label: 'Communication', path: '/communication' },
-    { icon: FileText, label: 'Documents', path: '/documents' },
-    { icon: Settings, label: 'Settings', path: '/settings' },
+    {
+      name: 'Dashboard',
+      icon: <LayoutDashboard className="h-5 w-5" />,
+      path: '/'
+    },
+    {
+      name: 'Resume Analysis',
+      icon: <FileText className="h-5 w-5" />,
+      path: '/resume'
+    },
+    {
+      name: 'Candidates',
+      icon: <Users className="h-5 w-5" />,
+      path: '/candidates'
+    },
+    {
+      name: 'Jobs',
+      icon: <Briefcase className="h-5 w-5" />,
+      path: '/jobs'
+    },
+    {
+      name: 'Interviews',
+      icon: <Calendar className="h-5 w-5" />,
+      path: '/interviews'
+    }
   ];
 
-  const handleNavigate = (path: string) => {
-    navigate(path);
-  };
+  const bottomItems = [
+    {
+      name: 'Settings',
+      icon: <Settings className="h-5 w-5" />,
+      path: '/settings'
+    },
+    {
+      name: 'Help',
+      icon: <HelpCircle className="h-5 w-5" />,
+      path: '/help'
+    }
+  ];
 
   return (
-    <aside 
+    <aside
       className={cn(
-        "h-screen bg-sidebar sticky top-0 border-r border-sidebar-border transition-all duration-300 ease-in-out z-30",
+        "fixed left-0 top-0 z-20 flex h-full flex-col border-r bg-card transition-all duration-300",
         collapsed ? "w-[70px]" : "w-[250px]"
       )}
     >
-      <div className="flex flex-col h-full">
-        <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
-          {!collapsed && (
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-md bg-purple-500 flex items-center justify-center">
-                <span className="font-bold text-white">RA</span>
-              </div>
-              <span className="font-semibold text-lg tracking-tight">Recruiter AI</span>
+      <div className="flex h-14 items-center px-4 py-4">
+        {!collapsed && (
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-md bg-purple-500 flex items-center justify-center">
+              <span className="font-bold text-white text-sm">RA</span>
             </div>
-          )}
-          {collapsed && (
-            <div className="w-full flex justify-center">
-              <div className="w-9 h-9 rounded-md bg-purple-500 flex items-center justify-center">
-                <span className="font-bold text-white">RA</span>
-              </div>
-            </div>
-          )}
-          <button 
-            onClick={() => setCollapsed(!collapsed)} 
-            className="w-6 h-6 rounded-full flex items-center justify-center text-sidebar-foreground hover:bg-sidebar-accent transition-colors"
-          >
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-          </button>
-        </div>
-        
-        <nav className="flex-1 overflow-y-auto py-4 px-3">
-          <ul className="space-y-2">
-            {menuItems.map((item) => (
-              <li key={item.label}>
-                <button
-                  onClick={() => handleNavigate(item.path)}
-                  className={cn(
-                    "menu-item w-full",
-                    location.pathname === item.path && "active"
-                  )}
-                >
-                  <item.icon size={18} />
-                  {!collapsed && <span>{item.label}</span>}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        
-        <div className="p-4 border-t border-sidebar-border mt-auto">
-          <div className={cn(
-            "rounded-lg p-3 bg-sidebar-accent flex items-center",
-            collapsed ? "justify-center" : "justify-between"
-          )}>
-            {!collapsed && (
-              <div className="flex flex-col">
-                <span className="text-xs font-medium text-sidebar-accent-foreground">Free Plan</span>
-                <div className="mt-1 w-full bg-sidebar-border rounded-full h-1.5">
-                  <div className="bg-purple-500 h-1.5 rounded-full w-[45%]"></div>
-                </div>
-              </div>
-            )}
-            <button className={cn(
-              "text-xs bg-sidebar-primary text-sidebar-primary-foreground px-2 py-1 rounded font-medium",
-              collapsed ? "w-full" : ""
-            )}>
-              {collapsed ? "Up" : "Upgrade"}
-            </button>
+            <span className="text-lg font-semibold">Recruiter AI</span>
           </div>
-        </div>
+        )}
+        {collapsed && (
+          <div className="mx-auto h-8 w-8 rounded-md bg-purple-500 flex items-center justify-center">
+            <span className="font-bold text-white text-sm">RA</span>
+          </div>
+        )}
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "ml-auto h-8 w-8",
+            collapsed && "rotate-180"
+          )}
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          <ChevronLeft className="h-4 w-4" />
+          <span className="sr-only">Toggle Sidebar</span>
+        </Button>
+      </div>
+      <ScrollArea className="flex-1 py-2">
+        <nav className="grid gap-1 px-2">
+          {menuItems.map((item, index) => (
+            <Link
+              key={index}
+              to={item.path}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-foreground",
+                pathname === item.path && "bg-accent text-accent-foreground"
+              )}
+            >
+              {item.icon}
+              {!collapsed && <span>{item.name}</span>}
+            </Link>
+          ))}
+        </nav>
+      </ScrollArea>
+      <div className="mt-auto px-2 py-2">
+        <Separator className="mb-2" />
+        <nav className="grid gap-1">
+          {bottomItems.map((item, index) => (
+            <Link
+              key={index}
+              to={item.path}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-foreground",
+                pathname === item.path && "bg-accent text-accent-foreground"
+              )}
+            >
+              {item.icon}
+              {!collapsed && <span>{item.name}</span>}
+            </Link>
+          ))}
+          <button
+            onClick={() => signOut()}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-foreground"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            {!collapsed && <span>Logout</span>}
+          </button>
+        </nav>
       </div>
     </aside>
   );
