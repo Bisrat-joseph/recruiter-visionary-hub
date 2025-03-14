@@ -17,6 +17,7 @@ serve(async (req) => {
 
   try {
     if (!MISTRAL_API_KEY) {
+      console.error("MISTRAL_API_KEY is not set in environment variables");
       throw new Error("MISTRAL_API_KEY is not set in environment variables");
     }
 
@@ -26,6 +27,8 @@ serve(async (req) => {
       throw new Error("Resume text is required and must be a string");
     }
 
+    console.log("Calling Mistral API to analyze resume...");
+    
     const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -51,10 +54,12 @@ serve(async (req) => {
     const data = await response.json();
     
     if (!response.ok) {
+      console.error("Mistral API error:", data);
       throw new Error(data.error?.message || "Failed to analyze resume");
     }
 
     const analysis = data.choices[0].message.content;
+    console.log("Resume analysis completed successfully");
 
     return new Response(JSON.stringify({ analysis }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

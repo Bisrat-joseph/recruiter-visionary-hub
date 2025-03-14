@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Upload, FileText, Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { Separator } from '@/components/ui/separator';
 
 export default function ResumeUploader() {
   const [resumeText, setResumeText] = useState('');
@@ -34,6 +35,11 @@ export default function ResumeUploader() {
       if (error) throw error;
 
       setAnalysis(data.analysis);
+      
+      toast({
+        title: "Analysis complete",
+        description: "Your resume has been successfully analyzed",
+      });
     } catch (error: any) {
       console.error("Error analyzing resume:", error);
       toast({
@@ -69,7 +75,7 @@ export default function ResumeUploader() {
 
   return (
     <div className="space-y-4">
-      <Card className="p-4">
+      <Card className="p-6">
         <h2 className="text-xl font-semibold mb-4">Resume Analysis</h2>
         <div className="space-y-4">
           <Textarea
@@ -78,7 +84,7 @@ export default function ResumeUploader() {
             value={resumeText}
             onChange={(e) => setResumeText(e.target.value)}
           />
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button 
               variant="outline" 
               onClick={() => document.getElementById('resume-file')?.click()}
@@ -115,9 +121,9 @@ export default function ResumeUploader() {
       </Card>
 
       {analysis && (
-        <Card className="p-4">
+        <Card className="p-6">
           <h2 className="text-xl font-semibold mb-4">Analysis Results</h2>
-          <div className="whitespace-pre-line">
+          <div className="prose max-w-none whitespace-pre-line">
             {analysis}
           </div>
         </Card>
