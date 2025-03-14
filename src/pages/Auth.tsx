@@ -56,6 +56,7 @@ const Auth = () => {
     
     try {
       setLoading(true);
+      // Use email as is, no transformation needed as Supabase handles case insensitivity
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -89,6 +90,7 @@ const Auth = () => {
     try {
       setLoading(true);
       
+      // Use email as is, no transformation needed as Supabase handles case insensitivity
       const { error } = await supabase.auth.signUp({
         email,
         password,
